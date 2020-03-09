@@ -1,0 +1,11 @@
+framework module FEKYC {
+  umbrella header "FEKYC-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module FEKYC.Swift {
+    header "FEKYC-Swift.h"
+    requires objc
+}

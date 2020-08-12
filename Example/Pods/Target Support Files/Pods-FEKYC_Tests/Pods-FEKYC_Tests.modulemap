@@ -1,0 +1,6 @@
+framework module Pods_FEKYC_Tests {
+  umbrella header "Pods-FEKYC_Tests-umbrella.h"
+
+  export *
+  module * { export * }
+}

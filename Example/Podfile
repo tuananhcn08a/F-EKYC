@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'FEKYC_Example' do
+  pod 'FEKYC', :path => '../'
+
+  target 'FEKYC_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end

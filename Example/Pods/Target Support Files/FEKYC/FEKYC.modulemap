@@ -1,0 +1,6 @@
+framework module FEKYC {
+  umbrella header "FEKYC-umbrella.h"
+
+  export *
+  module * { export * }
+}

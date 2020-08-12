@@ -1,0 +1,39 @@
+{
+  "name": "FEKYC",
+  "version": "0.1.0",
+  "summary": "A short description of FEKYC.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/anhdt64/FEKYC",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "anhdt64": "anhdt4@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/anhdt64/FEKYC.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "10.0"
+  },
+  "source_files": "FEKYC/Classes/**/*",
+  "dependencies": {
+    "MBProgressHUD": [
+
+    ],
+    "Alamofire": [
+      "~> 4.7.2"
+    ],
+    "TPKeyboardAvoiding": [
+
+    ],
+    "HydraAsync": [
+
+    ],
+    "IDMPhotoBrowser": [
+
+    ]
+  }
+}

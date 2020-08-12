@@ -1,0 +1,53 @@
+PODS:
+  - Alamofire (4.7.3)
+  - DACircularProgress (2.3.1)
+  - FEKYC (0.1.0):
+    - Alamofire (~> 4.7.2)
+    - HydraAsync
+    - IDMPhotoBrowser
+    - MBProgressHUD
+    - TPKeyboardAvoiding
+  - HydraAsync (2.0.2)
+  - IDMPhotoBrowser (1.11.3):
+    - DACircularProgress
+    - pop
+    - SDWebImage (= 4.0.0)
+  - MBProgressHUD (1.2.0)
+  - pop (1.0.12)
+  - SDWebImage (4.0.0):
+    - SDWebImage/Core (= 4.0.0)
+  - SDWebImage/Core (4.0.0)
+  - TPKeyboardAvoiding (1.3.3)
+
+DEPENDENCIES:
+  - FEKYC (from `../`)
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - DACircularProgress
+    - HydraAsync
+    - IDMPhotoBrowser
+    - MBProgressHUD
+    - pop
+    - SDWebImage
+    - TPKeyboardAvoiding
+
+EXTERNAL SOURCES:
+  FEKYC:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
+  DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
+  FEKYC: a5fa7d404c4747667e3f4ae1908b4a353f553caa
+  HydraAsync: 690b8c1c9dcde7ee1093cee363a6c1ce36b56a83
+  IDMPhotoBrowser: b96159fe4adb991a844068eb17dab9c0b7d7e51a
+  MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
+  pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
+  SDWebImage: 76a6348bdc74eb5a55dd08a091ef298e56b55e41
+  TPKeyboardAvoiding: 6dd3fe3268b8f2627beb7ff3d82a3cacbdf66a36
+
+PODFILE CHECKSUM: 2e3294407b0b8820d4c4a46190f59840a5647dbb
+
+COCOAPODS: 1.9.1

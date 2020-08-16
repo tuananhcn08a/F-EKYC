@@ -2,10 +2,11 @@ use_frameworks!
 
 target 'FEKYC_Example' do
   pod 'FEKYC', :path => '../'
-
+  pod 'RadioGroup'
+  
   target 'FEKYC_Tests' do
     inherit! :search_paths
 
     
   end
-end
+end 

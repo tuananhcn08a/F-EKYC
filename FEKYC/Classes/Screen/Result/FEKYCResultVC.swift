@@ -173,7 +173,7 @@ class FEKYCResultVC: FEKYCBaseViewController {
     // MARK: - Action
     @IBAction func btnDoneClicked(_ sender: Any) {
         FEKYCDataManager.shared.completion?(result)
-        self.navigationController?.popToRootViewController(animated: true)
+        self.view.window?.rootViewController?.dismiss(animated: false, completion: nil)
     }
     
 }

@@ -134,7 +134,7 @@ class FEKYCBackendManager {
     }
     
     // Upload liveness video
-    func upload(photos: [UIImage], livenessVideo: URL, parameters: [String : String] = [:], completeHandle: (() -> ())?) -> Promise<[String: Any]?> {
+    func upload(frontDocumentPhoto: UIImage, livenessVideo: URL, parameters: [String : String] = [:], completeHandle: (() -> ())?) -> Promise<[String: Any]?> {
         
         let request = self.postRequest!
         request.url = URL(string: hostLivenessAPI)
@@ -158,21 +158,9 @@ class FEKYCBackendManager {
                 }
                 
                 // photo
-                if (FEKYCDataManager.shared.userState.documentType == .idCard || FEKYCDataManager.shared.userState.documentType == .driveLicense) {
-
-                    if let imageData = self.reduceImage(image: photos[0]) {
-                        let fileName = "\(fullName)_\(FEKYCDataManager.shared.userState.documentType.title())_front.jpg"
-                        multipartFormData.append(imageData, withName: "front", fileName: fileName, mimeType: "image/jpeg")
-                    }
-                    if let imageData = self.reduceImage(image: photos[1]) {
-                        let fileName = "\(fullName)_\(FEKYCDataManager.shared.userState.documentType.title())_back.jpg"
-                        multipartFormData.append(imageData, withName: "back", fileName: fileName, mimeType: "image/jpeg")
-                    }
-                } else if (FEKYCDataManager.shared.userState.documentType == .passport) {
-                    if let imageData = self.reduceImage(image: photos[0]) {
-                        let fileName = "\(fullName)_\(FEKYCDataManager.shared.userState.documentType.title())_front.jpg"
-                        multipartFormData.append(imageData, withName: "front", fileName: fileName, mimeType: "image/jpeg")
-                    }
+                if let imageData = self.reduceImage(image: frontDocumentPhoto) {
+                    let fileName = "\(fullName)_\(FEKYCDataManager.shared.userState.documentType.title())_front.jpg"
+                    multipartFormData.append(imageData, withName: "cmnd", fileName: fileName, mimeType: "image/jpeg")
                 }
                 
             }, with: (request as URLRequest), encodingCompletion: { (encodingResult) in

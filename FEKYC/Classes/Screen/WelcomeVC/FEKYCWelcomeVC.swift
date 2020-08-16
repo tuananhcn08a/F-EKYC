@@ -43,8 +43,9 @@ class FEKYCWelcomeVC: FEKYCBaseViewController {
             }
             
             if isValid {
-                strongSelf.btnNext.isHidden = false
-                strongSelf.checkAPIKeyDescripntionView.isHidden = true
+//                strongSelf.btnNext.isHidden = false
+//                strongSelf.checkAPIKeyDescripntionView.isHidden = true
+                strongSelf.performSegue(withIdentifier: "navigateToMainFlow", sender: nil)
             } else {
                 let alert = UIAlertController(title: "Error", message: "API Key is invalid", preferredStyle: UIAlertController.Style.alert)
                 alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: { [weak strongSelf] _ in

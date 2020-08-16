@@ -23,7 +23,6 @@ class FEKYCLivenessVC: FEKYCBaseViewController, AVCaptureFileOutputRecordingDele
         print(outputFileURL);
     }
     
-    
     // MARK: - Outlet
     
     @IBOutlet weak var submitView: UIView!
@@ -53,46 +52,67 @@ class FEKYCLivenessVC: FEKYCBaseViewController, AVCaptureFileOutputRecordingDele
     
     let videoFileOutput = AVCaptureMovieFileOutput()
     
+    var selfiePhoto: UIImage? = nil {
+        didSet {
+            if let imgPhoto = selfiePhoto {
+                let lstPhotos = self.lstDocumentPhoto + [imgPhoto]
+                FEKYCBackendManager.shared.upload(photos: lstPhotos, completeHandle: nil)
+                    .then { [weak self] response in
+                        self?.orcResponse = response
+                }
+            }
+        }
+    }
+    let photoOutput = AVCapturePhotoOutput()
+    
+    var orcResponse: [String: Any]? = nil
+    
     // MARK: COunt down
     let lstImgFaceBound = [
+        UIImage(withNamed: "FEKYC_face-inactive"),
+        UIImage(withNamed: "FEKYC_face-inactive"),
         UIImage(withNamed: "FEKYC_face-left"),
-                           UIImage(withNamed: "FEKYC_face-left-success"),
-                           UIImage(withNamed: "FEKYC_face-down"),
-                           UIImage(withNamed: "FEKYC_face-down-success"),
-                           UIImage(withNamed: "FEKYC_face-right"),
-                           UIImage(withNamed: "FEKYC_face-right-success"),
-                           UIImage(withNamed: "FEKYC_face-up"),
-                           UIImage(withNamed: "FEKYC_face-up-success")]
+        UIImage(withNamed: "FEKYC_face-left-success"),
+        UIImage(withNamed: "FEKYC_face-down"),
+        UIImage(withNamed: "FEKYC_face-down-success"),
+        UIImage(withNamed: "FEKYC_face-right"),
+        UIImage(withNamed: "FEKYC_face-right-success"),
+        UIImage(withNamed: "FEKYC_face-up"),
+        UIImage(withNamed: "FEKYC_face-up-success")]
     let lstArrow = [
-                    UIImage(withNamed: "FEKYC_ic_arrow_left"),
-                    UIImage(withNamed: "FEKYC_ic_arrow_left"),
-                    UIImage(withNamed: "FEKYC_ic_arrow_down"),
-                    UIImage(withNamed: "FEKYC_ic_arrow_down"),
-                    UIImage(withNamed: "FEKYC_ic_arrow_right"),
-                    UIImage(withNamed: "FEKYC_ic_arrow_right"),
-                    UIImage(withNamed: "FEKYC_ic_arrow_up"),
-                    UIImage(withNamed: "FEKYC_ic_arrow_up")]
+        UIImage(withNamed: "FEKYC_ic_arrow_up"),
+        UIImage(withNamed: "FEKYC_ic_arrow_up"),
+        UIImage(withNamed: "FEKYC_ic_arrow_left"),
+        UIImage(withNamed: "FEKYC_ic_arrow_left"),
+        UIImage(withNamed: "FEKYC_ic_arrow_down"),
+        UIImage(withNamed: "FEKYC_ic_arrow_down"),
+        UIImage(withNamed: "FEKYC_ic_arrow_right"),
+        UIImage(withNamed: "FEKYC_ic_arrow_right"),
+        UIImage(withNamed: "FEKYC_ic_arrow_up"),
+        UIImage(withNamed: "FEKYC_ic_arrow_up")]
     
-    let lstDirection = ["Turn Left",
-                          "Turn Left",
-                          "Turn Down",
-                          "Turn Down",
-                          "Turn Right",
-                          "Turn Right",
-                          "Turn Up",
-                          "Turn Up",
-                          "Keep Straight",
-                          "Keep Straight"]
-    let lstDescription = ["Please turn your face slowly to the left",
-                          "Please turn your face slowly to the left",
-                          "Please turn your face slowly to the down",
-                          "Please turn your face slowly to the down",
-                          "Please turn your face slowly to the right",
-                          "Please turn your face slowly to the right",
-                          "Please turn your face slowly to the up",
-                          "Please turn your face slowly to the up",
-                          "Please keep your face centered",
-                          "Please keep your face centered"]
+    let lstDirection = [
+        "Keep Straight",
+        "Keep Straight",
+        "Turn Left",
+        "Turn Left",
+        "Turn Down",
+        "Turn Down",
+        "Turn Right",
+        "Turn Right",
+        "Turn Up",
+        "Turn Up"]
+    let lstDescription = [
+        "Please keep your face centered",
+        "Please keep your face centered",
+        "Please turn your face slowly to the left",
+        "Please turn your face slowly to the left",
+        "Please turn your face slowly to the down",
+        "Please turn your face slowly to the down",
+        "Please turn your face slowly to the right",
+        "Please turn your face slowly to the right",
+        "Please turn your face slowly to the up",
+        "Please turn your face slowly to the up"]
     var myTimer: Timer = Timer()
     let totalCoundownTime: Int = 20
     let stepCoundownTime: Int = 2
@@ -103,36 +123,43 @@ class FEKYCLivenessVC: FEKYCBaseViewController, AVCaptureFileOutputRecordingDele
         lbDescription.text = lstDescription[0]
         imgDirection.image = lstArrow[0]
         
-        myTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(stepCoundownTime), repeats: true, block: { [weak self] timer in
-            guard let strongSelf = self else {
-                return
-            }
-            strongSelf.counter += strongSelf.stepCoundownTime
-            
-            if strongSelf.counter > 5 {
-                strongSelf.videoFileOutput.startRecording(to: strongSelf.filePath, recordingDelegate: strongSelf)
-            }
-            //
-            let step = strongSelf.counter / strongSelf.stepCoundownTime
-            if step < strongSelf.lstImgFaceBound.count {
-                strongSelf.imgFaceBound.image = strongSelf.lstImgFaceBound[step]
-            }
-            if step < strongSelf.lstDescription.count {
-                strongSelf.lbDescription.text = strongSelf.lstDescription[step]
-            }
-            if step < strongSelf.lstDirection.count {
-                strongSelf.lbDirection.text = strongSelf.lstDirection[step]
-            }
-            if step < strongSelf.lstArrow.count {
-                self?.imgDirection.image = strongSelf.lstArrow[step]
-            }
-            
-            //
-            if step >= (strongSelf.totalCoundownTime / strongSelf.stepCoundownTime - 1){
-                strongSelf.stopCounDown()
-            }
-        })
+        myTimer = Timer.scheduledTimer(timeInterval: TimeInterval(stepCoundownTime),
+          target: self,
+        selector: #selector(self.updateTime),
+        userInfo: nil,
+         repeats: true)
         
+    }
+    
+    @objc func updateTime() {
+        self.counter += self.stepCoundownTime
+        
+        if self.counter == 2 {
+            handleTakePhoto()
+        }
+        
+        if self.counter > 5 && !self.videoFileOutput.isRecording {
+            self.videoFileOutput.startRecording(to: self.filePath, recordingDelegate: self)
+        }
+        //
+        let step = self.counter / self.stepCoundownTime
+        if step < self.lstImgFaceBound.count {
+            self.imgFaceBound.image = self.lstImgFaceBound[step]
+        }
+        if step < self.lstDescription.count {
+            self.lbDescription.text = self.lstDescription[step]
+        }
+        if step < self.lstDirection.count {
+            self.lbDirection.text = self.lstDirection[step]
+        }
+        if step < self.lstArrow.count {
+            self.imgDirection.image = self.lstArrow[step]
+        }
+        
+        //
+        if step >= (self.totalCoundownTime / self.stepCoundownTime - 1){
+            self.stopCounDown()
+        }
     }
     
     func stopCounDown() {
@@ -191,24 +218,29 @@ class FEKYCLivenessVC: FEKYCBaseViewController, AVCaptureFileOutputRecordingDele
     // MARK: - Method
     
     private func setUpCaptureSessionOutput() {
-        sessionQueue.async {
-            self.captureSession.beginConfiguration()
+        sessionQueue.async { [weak self] in
+            guard let strongSelf = self else {
+                return
+            }
+            strongSelf.captureSession.beginConfiguration()
             // When performing latency tests to determine ideal capture settings,
             // run the app in 'release' mode to get accurate performance metrics
-            self.captureSession.sessionPreset = AVCaptureSession.Preset.high
+            strongSelf.captureSession.sessionPreset = AVCaptureSession.Preset.high
             
             let maximumVideoLength = 7; //Whatever value you wish to set as the maximum, in seconds
             let prefferedTimeScale = 30 //Frames per second
 
             let maxDuration = CMTimeMakeWithSeconds(Float64(maximumVideoLength), Int32(prefferedTimeScale))
-            self.videoFileOutput.maxRecordedDuration = maxDuration
+            strongSelf.videoFileOutput.maxRecordedDuration = maxDuration
                 
-            guard self.captureSession.canAddOutput(self.videoFileOutput) else {
-                print("Failed to add capture session output.")
-                return
+            if strongSelf.captureSession.canAddOutput(strongSelf.videoFileOutput) {
+                strongSelf.captureSession.addOutput(strongSelf.videoFileOutput)
             }
-            self.captureSession.addOutput(self.videoFileOutput)
-            self.captureSession.commitConfiguration()
+            
+            if strongSelf.captureSession.canAddOutput(strongSelf.photoOutput) {
+                strongSelf.captureSession.addOutput(strongSelf.photoOutput)
+            }
+            strongSelf.captureSession.commitConfiguration()
         }
     }
     
@@ -269,6 +301,14 @@ class FEKYCLivenessVC: FEKYCBaseViewController, AVCaptureFileOutputRecordingDele
         self.btnSubmit.backgroundColor = isEnable ? UIColor(hexString: "#F7722F") : UIColor(hexString: "#C7C7CC")
     }
     
+    private func handleTakePhoto() {
+           let photoSettings = AVCapturePhotoSettings()
+           if let photoPreviewType = photoSettings.availablePreviewPhotoPixelFormatTypes.first {
+               photoSettings.previewPhotoFormat = [kCVPixelBufferPixelFormatTypeKey as String: photoPreviewType]
+               photoOutput.capturePhoto(with: photoSettings, delegate: self)
+           }
+       }
+    
     // MARK: - Action
     @IBAction func switchCamera(_ sender: Any) {
         isUsingFrontCamera = !isUsingFrontCamera
@@ -291,30 +331,62 @@ class FEKYCLivenessVC: FEKYCBaseViewController, AVCaptureFileOutputRecordingDele
     }
     
     @IBAction func btnSubmitClicked(_ sender: Any) {
+        let hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+        hud.mode = MBProgressHUDMode.indeterminate
+        hud.backgroundView.color = UIColor(white: 0.0, alpha: 0.5)
+        hud.label.text = "Processing ..."
         
-        FEKYCBackendManager.shared.upload(photos: lstDocumentPhoto, livenessVideo: filePath, completeHandle: nil)
-            .then { [weak self] response in
-                
-                //                hud.hide(animated: true)
-                
-                guard let strongSelf = self, let stErrorCode = response?["code"] as? String, let errorCode = Int(stErrorCode) else {
+        FEKYCBackendManager.shared.upload(frontDocumentPhoto: self.lstDocumentPhoto[0], livenessVideo: self.filePath, completeHandle: nil)
+            .then { [weak self](response) in
+                guard let strongSelf = self else {
                     return
                 }
-                
-                FEKYCDataManager.shared.completion?(response)
-                
-//                if errorCode != 200, let message = response?["message"] as? String {
-//                    strongSelf.showAlertView(title: "Error", message: message, okTitle: "OK", cancelTitle: nil)
-//                    return
-//                }
-                
-                //                if let dataObj = response?["data"] as? [String: Any] {
-                //                    successHandler?(dataObj)
-                //                }
-        }.catch { error in
-            self.showAlertView(title: "Error", message: error.localizedDescription, okTitle: "OK", cancelTitle: nil)
+                hud.hide(animated: true)
+                let result: [String: Any] = ["orcResponse": strongSelf.orcResponse, "livenessResponse": response]
+                FEKYCDataManager.shared.completion?(result)
+                self?.view.window?.rootViewController?.dismiss(animated: false, completion: nil)
+        }.catch { [weak self] error in
+            self?.showAlertView(title: "Error", message: error.localizedDescription, okTitle: "OK", cancelTitle: nil)
+            hud.hide(animated: true)
         }
     }
     
 }
 
+extension FEKYCLivenessVC: AVCapturePhotoCaptureDelegate {
+    
+    func photoOutput(_ output: AVCapturePhotoOutput, willCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
+        // dispose system shutter sound
+        AudioServicesDisposeSystemSoundID(1108)
+    }
+    
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingRawPhoto rawSampleBuffer: CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
+        
+        if let error = error {
+            print("error occure : \(error.localizedDescription)")
+        }
+
+        if  let sampleBuffer = rawSampleBuffer,
+            let previewBuffer = previewPhotoSampleBuffer,
+            let dataImage =  AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer:  sampleBuffer, previewPhotoSampleBuffer: previewBuffer) {
+            print(UIImage(data: dataImage)?.size as Any)
+
+            let dataProvider = CGDataProvider(data: dataImage as CFData)
+            let cgImageRef: CGImage! = CGImage(jpegDataProviderSource: dataProvider!, decode: nil, shouldInterpolate: true, intent: .defaultIntent)
+            let image = UIImage(cgImage: cgImageRef, scale: 1.0, orientation: UIImageOrientation.right)
+
+            self.selfiePhoto = image
+        } else {
+            print("some error here")
+        }
+    }
+    
+    @available(iOS 11.0, *)
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+        
+        guard let imageData = photo.fileDataRepresentation() else {
+            return
+        }
+        self.selfiePhoto = UIImage(data: imageData);
+    }
+}

@@ -15,16 +15,16 @@
 	<key>CFBundlePackageType</key>
 	<string>FMWK</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(MARKETING_VERSION)</string>
+	<string>0.1.4</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>${CURRENT_PROJECT_VERSION}</string>
+	<key>NSPrincipalClass</key>
+	<string></string>
 	<key>NSCameraUsageDescription</key>
 	<string>FEKYC need camera access to scan document</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>FEKYC Request access to your Library to upload document</string>
-	<key>NSPrincipalClass</key>
-	<string></string>
 </dict>
 </plist>

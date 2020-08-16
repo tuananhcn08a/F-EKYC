@@ -1,24 +1,23 @@
 {
   "name": "FEKYC",
-  "version": "0.1.0",
+  "version": "0.1.4",
   "summary": "A short description of FEKYC.",
   "description": "TODO: Add long description of the pod here.",
-  "homepage": "https://github.com/anhdt64/FEKYC",
+  "homepage": "https://github.com/tuananhcn08a/F-EKYC",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
   },
   "authors": {
-    "anhdt64": "anhdt4@gmail.com"
+    "anhdt64": "anhdt64@fpt.com.vn"
   },
   "source": {
-    "git": "https://github.com/anhdt64/FEKYC.git",
-    "tag": "0.1.0"
+    "http": "https://github.com/tuananhcn08a/F-EKYC/raw/master/FEKYC.zip"
   },
   "platforms": {
     "ios": "10.0"
   },
-  "source_files": "FEKYC/Classes/**/*",
+  "source_files": "FEKYC/**/*.{h,m,swift}",
   "dependencies": {
     "MBProgressHUD": [
 
